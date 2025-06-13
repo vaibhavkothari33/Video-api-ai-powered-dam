@@ -1,10 +1,12 @@
-import monogoose, { models, model, Schema } from 'mongoose';
+// import monogoose, { models, model, Schema } from 'mongoose';
+import mongoose, { models, model, Schema } from 'mongoose';
+
 import bcrypt from 'bcryptjs';
 
 export interface IUser {
     email: string;
     password: string;
-    _id?: monogoose.Types.ObjectId;
+    _id?: mongoose.Types.ObjectId;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -20,7 +22,7 @@ const userSchema = new Schema<IUser>({
 
 userSchema.pre("save", async function (next) {
     if (this.isModified("password")) {
-        await bcrypt.hash(this.password, 10)
+        this.password = await bcrypt.hash(this.password, 10)
     }
 
     next()

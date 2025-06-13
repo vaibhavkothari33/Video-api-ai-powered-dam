@@ -13,7 +13,7 @@ if (!cached) {
     cached = global.monogoose = { conn: null, promise: null }
 }
 
-export async function connectionToDatabase() {
+export async function connectToDatabase() {
     if (cached.conn) {
         return cached.conn;
     }
