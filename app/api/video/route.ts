@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
         const newVideo = await Video.create(videoData)
         return NextResponse.json(newVideo)
 
-        
+
     } catch (error) {
         console.log(error);
         return NextResponse.json(
