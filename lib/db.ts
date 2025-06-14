@@ -1,7 +1,6 @@
 
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONOGODB_URI!
 
 if (!MONGODB_URI) {
     throw new Error("Please define mongo_URI in ev")
@@ -21,7 +20,7 @@ export async function connectToDatabase() {
 
         const opts = {
             bufferCommands: true,
-            maxPollSize: 10
+            // maxPollSize: 10
         }
         mongoose.connect(MONGODB_URI, opts).then(() => mongoose.connection);
     }

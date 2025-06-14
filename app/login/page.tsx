@@ -20,7 +20,7 @@ function LoginPage() {
             console.log(result.error);
         }
         else {
-            router.push("/");
+            router.push("/upload");
         }
     }
 
