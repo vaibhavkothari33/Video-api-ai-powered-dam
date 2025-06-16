@@ -2,7 +2,7 @@ import { authOptions } from "@/lib/auth";
 import { connectToDatabase } from "@/lib/db";
 import Video from "@/models/Video";
 import { getServerSession } from "next-auth";
-import {  NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
@@ -23,7 +23,6 @@ export async function GET() {
 
 export async function POST(request: Request) {
     try {
-        // Check authentication
         const session = await getServerSession(authOptions);
         if (!session) {
             return NextResponse.json(
@@ -32,44 +31,33 @@ export async function POST(request: Request) {
             );
         }
 
-        // Connect to database
         await connectToDatabase();
-
-        // Parse and validate request body
         const body = await request.json();
-        console.log('Received video data:', body); // Debug log
 
-        if (!body.title || !body.description || !body.videoUrl) {
+        // Validate required fields
+        if (!body.title?.trim() || !body.description?.trim() || !body.videoUrl) {
             return NextResponse.json(
                 { error: "Missing required fields" },
                 { status: 400 }
             );
         }
 
-        // Create video document
         const video = await Video.create({
-            title: body.title,
-            description: body.description,
+            title: body.title.trim(),
+            description: body.description.trim(),
             videoUrl: body.videoUrl,
-            userId: session.user.id,
-            createdAt: new Date()
+            userId: session.user.id
         });
 
-        console.log('Created video:', video); // Debug log
         return NextResponse.json(video, { status: 201 });
-
     } catch (error) {
-        // Improved error logging
         console.error("Video creation error:", {
-            error: error instanceof Error ? error.message : error,
+            message: error instanceof Error ? error.message : 'Unknown error',
             stack: error instanceof Error ? error.stack : undefined
         });
 
         return NextResponse.json(
-            { 
-                error: "Failed to create video",
-                details: error instanceof Error ? error.message : undefined
-            },
+            { error: "Failed to create video", details: error instanceof Error ? error.message : undefined },
             { status: 500 }
         );
     }

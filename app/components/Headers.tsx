@@ -3,18 +3,18 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { Home, User } from "lucide-react";
-import { useNotification } from "./Notification";
+// import { useNotification } from "./Notification";
 
 export default function Header() {
   const { data: session } = useSession();
-  const { showNotification } = useNotification();
+  // const { showNotification } = useNotification();
 
   const handleSignOut = async () => {
     try {
       await signOut();
-      showNotification("Signed out successfully", "success");
+      // showNotification("Signed out successfully", "success");
     } catch {
-      showNotification("Failed to sign out", "error");
+      // showNotification("Failed to sign out", "error");
     }
   };
 
@@ -26,9 +26,9 @@ export default function Header() {
             href="/"
             className="btn btn-ghost text-xl gap-2 normal-case font-bold"
             prefetch={true}
-            onClick={() =>
-              showNotification("Welcome to ImageKit ReelsPro", "info")
-            }
+            // onClick={() =>
+            //   // showNotification("Welcome to ImageKit ReelsPro", "info")
+            // }
           >
             <Home className="w-5 h-5" />
             Video with AI
@@ -61,9 +61,10 @@ export default function Header() {
                       <Link
                         href="/upload"
                         className="px-4 py-2 hover:bg-base-200 block w-full"
-                        onClick={() =>
-                          showNotification("Welcome to Admin Dashboard", "info")
-                        }
+                        // onClick={() =>
+                        //   showNotification("Welcome to Admin Dashboard", "info")
+                        // }
+                        
                       >
                         Video Upload
                       </Link>
@@ -83,9 +84,9 @@ export default function Header() {
                     <Link
                       href="/login"
                       className="px-4 py-2 hover:bg-base-200 block w-full"
-                      onClick={() =>
-                        showNotification("Please sign in to continue", "info")
-                      }
+                      // onClick={() =>
+                      //   // showNotification("Please sign in to continue", "info")
+                      // }
                     >
                       Login
                     </Link>

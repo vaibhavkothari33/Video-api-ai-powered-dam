@@ -1,52 +1,3 @@
-// import { IVideo } from "@/models/Video";
-
-// export type VideoFormData = Omit<IVideo, "_id">;
-
-// type FetchOptions = {
-//   method?: "GET" | "POST" | "PUT" | "DELETE";
-//   body?: any;
-//   headers?: Record<string, string>;
-// };
-
-// class ApiClient {
-//   private async fetch<T>(
-//     endpoint: string,
-//     options: FetchOptions = {}
-//   ): Promise<T> {
-//     const { method = "GET", body, headers = {} } = options;
-
-//     const defaultHeaders = {
-//       "Content-Type": "application/json",
-//       ...headers,
-//     };
-
-//     const response = await fetch(`/api${endpoint}`, {
-//       method,
-//       headers: defaultHeaders,
-//       body: body ? JSON.stringify(body) : undefined,
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(await response.text());
-//     }
-
-//     return response.json();
-//   }
-
-//   async getVideos() {
-//     return this.fetch("/videos");
-//   }
-
-//   async createVideo(videoData: VideoFormData) {
-//     return this.fetch("/videos", {
-//       method: "POST",
-//       body: videoData,
-//     });
-//   }
-// }
-
-// export const apiClient = new ApiClient();
-// File: lib/api-client.ts
 import { IVideo } from "@/models/Video";
 
 export type VideoFormData = Omit<IVideo, "_id">;
@@ -64,26 +15,27 @@ class ApiClient {
   ): Promise<T> {
     const { method = "GET", body, headers = {} } = options;
 
-    const defaultHeaders = {
-      "Content-Type": "application/json",
-      ...headers,
-    };
+    try {
+      const response = await fetch(`/api/video${endpoint}`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      });
 
-    const response = await fetch(`/api/video${endpoint}`, {
-      method,
-      headers: defaultHeaders,
-      body: body ? JSON.stringify(body) : undefined,
-    });
+      const data = await response.json();
 
-    const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+      }
 
-    if (!response.ok) {
-      throw new Error(
-        data.error || `HTTP error! status: ${response.status}`
-      );
+      return data;
+    } catch (error) {
+      console.error("API request failed:", error);
+      throw error instanceof Error ? error : new Error("Unknown error occurred");
     }
-
-    return data;
   }
 
   async createVideo(videoData: VideoFormData) {
@@ -95,6 +47,10 @@ class ApiClient {
 
   async getVideos() {
     return this.fetch<IVideo[]>("");
+  }
+
+  async getVideo(id: string) {
+    return this.fetch<IVideo>(`/${id}`);
   }
 }
 
