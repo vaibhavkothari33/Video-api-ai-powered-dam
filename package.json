@@ -12,6 +12,7 @@
     "@imagekit/next": "^2.1.2",
     "@types/bcrypt": "^5.0.2",
     "bcryptjs": "^3.0.2",
+    "framer-motion": "^12.18.1",
     "imagekit": "^6.0.0",
     "imagekitio-next": "^1.0.1",
     "lucide-react": "^0.515.0",
